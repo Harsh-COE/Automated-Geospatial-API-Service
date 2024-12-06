@@ -1,0 +1,42 @@
+version: '1.0'
+services:
+  db:
+    image: postgis/postgis
+    container_name: postgis_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: karnataka_db
+    ports:
+      - "5432:5432"
+
+  api:
+    build:
+      context: .
+    container_name: api_server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://admin:admin@db:5432/karnataka_db"
+    command: ["dockerize", "-wait", "tcp://db:5432", "-timeout", "30s", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  redis:
+    image: redis:6.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+  celery_worker:
+    build:
+      context: .
+    container_name: celery_worker
+    depends_on:
+      - redis
+      - db
+    environment:
+      CELERY_BROKER_URL: "redis://redis:6379/0"
+      DATABASE_URL: "postgresql://admin:admin@db:5432/karnataka_db"
+    command: ["dockerize", "-wait", "tcp://redis:6379", "-timeout", "30s", "dockerize", "-wait", "tcp://db:5432", "-timeout", "30s", "celery", "-A", "Cron", "worker", "--loglevel=info"]
+
+
