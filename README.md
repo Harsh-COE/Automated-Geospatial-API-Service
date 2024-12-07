@@ -23,7 +23,7 @@
     Added Validation checks and Error logs along with rollback features.
 
 
-### 3. Cron Job / task Automation
+### 3. Cron Job / Task Automation
 
     Enabled Automated Data ingestion pipeline to fetch the data using Celery and Redis.
 
