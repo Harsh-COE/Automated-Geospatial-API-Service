@@ -6,6 +6,7 @@ geopandas
 requests
 celery
 redis
+fiona==1.8.21
 geopandas==0.12.2
 pyogrio
 geoalchemy2
