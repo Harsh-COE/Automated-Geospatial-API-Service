@@ -27,7 +27,7 @@
 
     Enabled Automated Data ingestion pipeline to fetch the data using Celery and Redis.
 
-### 4. Continerization
+### 4. Containerization
 
     Used Docker to orchestrate the containers for PostgreSQL (with PostGIS), FastAPI, Celery and Redis.
 
